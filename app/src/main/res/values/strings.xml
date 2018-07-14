@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">FareHawker</string>
+    <string-array name="travelClassArray">
+        <item>
+            Economy class
+        </item>
+        <item>
+            Premium Economy
+        </item>
+        <item>
+            Business Class
+        </item>
+    </string-array>
+    <string name="titleTravelClassDialogFragment">
+        <item>
+            Travel class
+        </item>
+
+    </string>
 </resources>

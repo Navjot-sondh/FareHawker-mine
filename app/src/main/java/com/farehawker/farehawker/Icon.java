@@ -1,18 +1,28 @@
 package com.farehawker.farehawker;
 
-import android.widget.ImageView;
-import android.widget.TextView;
 
-/**
- * Created by Waheguru on 7/8/2018.
- */
+public class Icon {
+    public int productImage;
+    public String productName;
 
-public class Icon
-{
-    private ImageView icon_image;
-    private TextView icon_text;
-    public Icon()
-    {
+    public Icon( int productImage,String productName) {
+        this.productImage = productImage;
+        this.productName = productName;
+    }
 
+    public int getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(int productImage) {
+        this.productImage = productImage;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }
