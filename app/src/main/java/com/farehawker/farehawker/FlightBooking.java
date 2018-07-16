@@ -2,12 +2,14 @@ package com.farehawker.farehawker;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -31,18 +33,24 @@ public class FlightBooking extends AppCompatActivity {
     EditText flightDateEditText;
     EditText displayTravelClassDialog;
     Calendar myCalendar = Calendar.getInstance();
-    ImageView fligtSeatImageView;
+    Button okButton;
     //Day month and year for DatePickerDilog
     int year = Calendar.YEAR;
     int month = Calendar.MONTH;
     int day = Calendar.DAY_OF_MONTH;
 
+    TextView adultsTextView;
+    TextView childrenTextView;
+    TextView infantsTextView;
 
+    LinearLayout travellersDialog;
     //Images in front of buttons
     ImageView oneWaybuttonImageView, roundTripButtonImageView, multicityButtonImageView;
 
-    AlertDialog.Builder builder;
+    AlertDialog.Builder TravellersBuilder;
+    AlertDialog alertDialog;
 
+    //Number of travellers Alert Dialog
     public void changeTextViewColor(View view) {
 
         String tag = (String) view.getTag();
@@ -113,6 +121,82 @@ public class FlightBooking extends AppCompatActivity {
 
     }
 
+    public void changePassengers(View view) {
+
+        Log.i("Log", "changePassengers");
+        Log.i("Here", Integer.toString(view.getId()));
+        int adults, children, infants;
+        children=Integer.parseInt( childrenTextView.getText().toString());
+        adults=Integer.parseInt(adultsTextView.getText().toString());
+        infants=Integer.parseInt(infantsTextView.getText().toString());
+        try {
+            Log.i("Log", childrenTextView.getText().toString());
+            String tag = (String) view.getTag();
+            Log.i("Log", tag);
+        switch(tag)
+        {
+            //Adults
+
+            case "1":
+                if(adults>0 && ( adults>infants))
+                {
+                    adults--;
+                    adultsTextView.setText(Integer.toString(adults));
+                }
+                else if(adults==infants && adults>0)
+                {
+                    adults--;
+                    infants--;
+                    adultsTextView.setText(Integer.toString(adults));
+                    infantsTextView.setText(Integer.toString(children));
+                }
+                break;
+            case "2":
+                     if(adults+children<9)
+                     {
+                         adults=adults+1;
+                         adultsTextView.setText(Integer.toString(adults));
+                     }
+                break;
+                     //children
+            case "3":if(children>0)
+            {
+
+                children--;
+                childrenTextView.setText(Integer.toString(children));
+            }
+                break;
+            case "4":
+                if((adults+children)<9)
+                {
+                    children=children+1;
+                    childrenTextView.setText(Integer.toString(children));
+                }
+                break;
+                //infants
+            case "5":
+
+                if(infants>0)
+                {
+                    infants--;
+                    infantsTextView.setText(Integer.toString(infants));
+                }
+                break;
+            case "6":if(infants<adults)
+            {
+                infants++;
+                infantsTextView.setText(Integer.toString(infants));
+            }
+                break;
+
+        }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
     public void displayTravelClassDialog(View view) {
         Log.i("Log", "EditText Tapped");
         final String[] classes = getResources().getStringArray(R.array.travelClassArray);
@@ -130,8 +214,30 @@ public class FlightBooking extends AppCompatActivity {
         builder.show();
     }
 
+    public void displayTravellersDialog(View view) {
+
+        Log.i("Log", "displayTravellersDialog method");
+        TravellersBuilder = new AlertDialog.Builder(FlightBooking.this);
+        LayoutInflater inflater = FlightBooking.this.getLayoutInflater();
+        TravellersBuilder.setView(inflater.inflate(R.layout.number_of_travellers, null));
+        alertDialog = TravellersBuilder.show();
+        //number of passengers
+        adultsTextView = (TextView) alertDialog.findViewById(R.id.adultTextView);
+        childrenTextView =(TextView) alertDialog.findViewById(R.id.childrenTextView);
+        infantsTextView=(TextView) alertDialog.findViewById(R.id.infantsTextView);
+        Log.i("Here",adultsTextView.getText().toString());
+    }//End of displayTravellersDialog
+
+    public void dismiss(View view) {
+        alertDialog.dismiss();
+    }
+
+    public void getTag() {
+
+    }
+
     public void showDatePicker(View view) {
-        Log.i("showDatePicker", "method invoked");
+        Log.i("Log", "method invoked");
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "Date Picker");
     }
@@ -197,8 +303,13 @@ public class FlightBooking extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-
-
+        travellersDialog = (LinearLayout) findViewById(R.id.travellersDialog);
+        okButton = (Button) findViewById(R.id.okButton);
+        //number of passengers
+//        adultsTextView=(TextView) alertDialog.findViewById(R.id.adultTextView);
+       /* childrenTextView =(TextView) travellersDialog.findViewById(R.id.childrenTextView);
+        infantsTextView = (TextView) travellersDialog.findViewById(R.id.infantsTextView);
+*/
     }// End of onCreate
 
     public void updateLabel() {
