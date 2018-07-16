@@ -381,7 +381,6 @@
 
                         <EditText
                             android:id="@+id/roundTripEditText"
-
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="30dp"
@@ -439,6 +438,8 @@
                             android:textSize="19sp" />
 
                         <EditText
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/displayTravelClassDialog"
                             android:onClick="displayTravelClassDialog"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

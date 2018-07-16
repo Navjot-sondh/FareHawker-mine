@@ -21,8 +21,10 @@ public class AlertDialogWithList extends DialogFragment
                         Toast.makeText(getActivity(), travelClassesArray[which], Toast.LENGTH_SHORT).show();
                     }
                 });
+
         AlertDialog dialog = alertDialogBuilder.create();
-        return dialog;
+       return  alertDialogBuilder.create();
+        //return dialog;
     }
 }//End of AlertDialogWithList class
 
