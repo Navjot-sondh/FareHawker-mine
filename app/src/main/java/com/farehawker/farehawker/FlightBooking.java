@@ -25,12 +25,13 @@ import java.util.Locale;
 
 public class FlightBooking extends AppCompatActivity {
     LinearLayout oneAndRoundLinearLayout;
+
     Button oneWayButton, roundTripButton, multiCityButton;
     TextView returnTextView;
     EditText roundTripEditText;
     LinearLayout roundTripLinearLayout;
     LinearLayout multicityLinearLayout;
-    EditText flightDateEditText;
+    EditText flightDateEditText,travellersEditText;
     EditText displayTravelClassDialog;
     Calendar myCalendar = Calendar.getInstance();
     Button okButton;
@@ -121,81 +122,84 @@ public class FlightBooking extends AppCompatActivity {
 
     }
 
-    public void changePassengers(View view) {
-
+    public void changePassengers(View view)
+    {
+        travellersEditText=findViewById(R.id.travellersEditText);
+        int totalTravellers=0;
         Log.i("Log", "changePassengers");
-        Log.i("Here", Integer.toString(view.getId()));
+       //Log.i("Here", Integer.toString(view.getId()));
         int adults, children, infants;
-        children=Integer.parseInt( childrenTextView.getText().toString());
-        adults=Integer.parseInt(adultsTextView.getText().toString());
-        infants=Integer.parseInt(infantsTextView.getText().toString());
-        try {
+        children = Integer.parseInt(childrenTextView.getText().toString());
+        adults = Integer.parseInt(adultsTextView.getText().toString());
+        infants = Integer.parseInt(infantsTextView.getText().toString());
+        try
+        {
             Log.i("Log", childrenTextView.getText().toString());
             String tag = (String) view.getTag();
             Log.i("Log", tag);
-        switch(tag)
+            switch (tag)
+            {
+                //Adults
+                case "1":
+                    if (adults > 1 && (adults > infants))
+                    {
+                        adults--;
+                        adultsTextView.setText(Integer.toString(adults));
+
+                    } else if (adults == infants && adults > 1) {
+                        adults--;
+                        infants--;
+                        adultsTextView.setText(Integer.toString(adults));
+                        infantsTextView.setText(Integer.toString(infants));
+                    }
+                    break;
+                case "2":
+                    if (adults + children < 9) {
+                        adults = adults + 1;
+                        adultsTextView.setText(Integer.toString(adults));
+                    }
+                    break;
+                //children
+                case "3":
+                    if (children > 0) {
+
+                        children--;
+                        childrenTextView.setText(Integer.toString(children));
+                    }
+                    break;
+                case "4":
+                    if ((adults + children) < 9) {
+                        children = children + 1;
+                        childrenTextView.setText(Integer.toString(children));
+                    }
+                    break;
+                //- textView pressed decrease number of infants
+                case "5":
+
+                    if (infants > 0) {
+                        infants--;
+                        infantsTextView.setText(Integer.toString(infants));
+                    }
+                    break;
+                    //+ sign on
+                case "6":
+                    if (infants < adults) {
+                        infants++;
+                        infantsTextView.setText(Integer.toString(infants));
+                    }
+                    break;
+
+            }
+            totalTravellers=adults+children+infants;
+            Log.i("TotalNumberOfTravellers",Integer.toString(totalTravellers));
+            travellersEditText.setText(Integer.toString(totalTravellers));
+        }//End of try block
+        catch (Exception exception)
         {
-            //Adults
-
-            case "1":
-                if(adults>0 && ( adults>infants))
-                {
-                    adults--;
-                    adultsTextView.setText(Integer.toString(adults));
-                }
-                else if(adults==infants && adults>0)
-                {
-                    adults--;
-                    infants--;
-                    adultsTextView.setText(Integer.toString(adults));
-                    infantsTextView.setText(Integer.toString(children));
-                }
-                break;
-            case "2":
-                     if(adults+children<9)
-                     {
-                         adults=adults+1;
-                         adultsTextView.setText(Integer.toString(adults));
-                     }
-                break;
-                     //children
-            case "3":if(children>0)
-            {
-
-                children--;
-                childrenTextView.setText(Integer.toString(children));
-            }
-                break;
-            case "4":
-                if((adults+children)<9)
-                {
-                    children=children+1;
-                    childrenTextView.setText(Integer.toString(children));
-                }
-                break;
-                //infants
-            case "5":
-
-                if(infants>0)
-                {
-                    infants--;
-                    infantsTextView.setText(Integer.toString(infants));
-                }
-                break;
-            case "6":if(infants<adults)
-            {
-                infants++;
-                infantsTextView.setText(Integer.toString(infants));
-            }
-                break;
-
-        }
-
-        } catch (Exception exception) {
             exception.printStackTrace();
-        }
+        }//End of catch block
 
-    }
+    }//End of changePassengers fumctions
 
     public void displayTravelClassDialog(View view) {
         Log.i("Log", "EditText Tapped");
@@ -214,8 +218,8 @@ public class FlightBooking extends AppCompatActivity {
         builder.show();
     }
 
-    public void displayTravellersDialog(View view) {
-
+    public void displayTravellersDialog(View view)
+    {
         Log.i("Log", "displayTravellersDialog method");
         TravellersBuilder = new AlertDialog.Builder(FlightBooking.this);
         LayoutInflater inflater = FlightBooking.this.getLayoutInflater();
@@ -223,9 +227,9 @@ public class FlightBooking extends AppCompatActivity {
         alertDialog = TravellersBuilder.show();
         //number of passengers
         adultsTextView = (TextView) alertDialog.findViewById(R.id.adultTextView);
-        childrenTextView =(TextView) alertDialog.findViewById(R.id.childrenTextView);
-        infantsTextView=(TextView) alertDialog.findViewById(R.id.infantsTextView);
-        Log.i("Here",adultsTextView.getText().toString());
+        childrenTextView = (TextView) alertDialog.findViewById(R.id.childrenTextView);
+        infantsTextView = (TextView) alertDialog.findViewById(R.id.infantsTextView);
+        Log.i("Here", adultsTextView.getText().toString());
     }//End of displayTravellersDialog
 
     public void dismiss(View view) {
@@ -243,9 +247,12 @@ public class FlightBooking extends AppCompatActivity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.flight_booking);
+        travellersEditText=(EditText) findViewById(R.id.travellersEditText);
         oneWayButton = (Button) findViewById(R.id.oneWayButton);
         roundTripButton = (Button) findViewById(R.id.roundTripButton);
         multiCityButton = (Button) findViewById(R.id.multicityButton);
