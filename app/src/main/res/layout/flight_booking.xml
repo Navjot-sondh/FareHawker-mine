@@ -287,7 +287,8 @@
                     android:text="From"
                     android:textSize="19sp" />
 
-                <EditText
+                <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
@@ -313,7 +314,7 @@
                         android:text="To"
                         android:textSize="19sp" />
 
-                    <EditText
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
@@ -379,15 +380,18 @@
                             android:text="RETURN"
                             android:textSize="19sp" />
 
-                        <EditText
-                            android:id="@+id/roundTripEditText"
+                        <TextView
+                            android:clickable="true"
+                            android:id="@+id/roundTripTextView"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="30dp"
-                            android:hint="Round Trips"
+                            android:text="Round Trips"
                             android:textColor="#222222"
                             android:textSize="27sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:onClick="setRoundTrip"
+                            android:focusableInTouchMode="false"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -416,14 +420,14 @@
                             android:text="TRAVELLERS"
                             android:textSize="19sp" />
 
-                        <EditText
+                        <TextView
                             android:onClick="displayTravellersDialog"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:text="01"
                             android:textSize="27sp"
-                            android:id="@+id/travellersEditText"/>
+                            android:id="@+id/travellersTextView"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -439,7 +443,7 @@
                             android:text="CABIN CLASS"
                             android:textSize="19sp" />
 
-                        <EditText
+                        <TextView
                             android:focusableInTouchMode="false"
                             android:id="@+id/displayTravelClassDialog"
                             android:onClick="displayTravelClassDialog"

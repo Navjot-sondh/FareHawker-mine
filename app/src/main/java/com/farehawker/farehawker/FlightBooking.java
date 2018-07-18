@@ -25,20 +25,22 @@ import java.util.Locale;
 
 public class FlightBooking extends AppCompatActivity {
     LinearLayout oneAndRoundLinearLayout;
-
+    TextView roundTripTextView;
     Button oneWayButton, roundTripButton, multiCityButton;
     TextView returnTextView;
-    EditText roundTripEditText;
     LinearLayout roundTripLinearLayout;
     LinearLayout multicityLinearLayout;
-    EditText flightDateEditText,travellersEditText;
-    EditText displayTravelClassDialog;
+    TextView flightDateEditText,travellersTextView;
+    TextView displayTravelClassDialog;
     Calendar myCalendar = Calendar.getInstance();
     Button okButton;
     //Day month and year for DatePickerDilog
-    int year = Calendar.YEAR;
+    int year_ = Calendar.YEAR;
     int month = Calendar.MONTH;
     int day = Calendar.DAY_OF_MONTH;
+
+    //return dates for round trip
+    int returnYear,returnMonth,returnDay;
 
     TextView adultsTextView;
     TextView childrenTextView;
@@ -105,6 +107,13 @@ public class FlightBooking extends AppCompatActivity {
                 roundTripButton.setTextColor(Color.parseColor("#000000"));
                 multiCityButton.setTextColor(Color.parseColor("#FFFFFF"));
 
+                /*
+                 * It means that the setBackground(Drawable) method was added in API Level 16,
+                * and older devices do not have it. However, your app's minSdkVersion is 14.
+                * So, unless you take steps to avoid this line on API Level 14 and 15 devices,
+                * your app will crash on those devices.
+                * Do not change it unless you want to run it devices running API level 14 or lower
+                * */
                 multiCityButton.setBackground(getResources().getDrawable(R.drawable.pressed));
                 oneWayButton.setBackground(getResources().getDrawable(R.drawable.normal));
                 roundTripButton.setBackground(getResources().getDrawable(R.drawable.normal));
@@ -124,7 +133,7 @@ public class FlightBooking extends AppCompatActivity {
 
     public void changePassengers(View view)
     {
-        travellersEditText=findViewById(R.id.travellersEditText);
+        travellersTextView=findViewById(R.id.travellersTextView);
         int totalTravellers=0;
         Log.i("Log", "changePassengers");
        //Log.i("Here", Integer.toString(view.getId()));
@@ -192,7 +201,7 @@ public class FlightBooking extends AppCompatActivity {
             }
             totalTravellers=adults+children+infants;
             Log.i("TotalNumberOfTravellers",Integer.toString(totalTravellers));
-            travellersEditText.setText(Integer.toString(totalTravellers));
+            travellersTextView.setText(Integer.toString(totalTravellers));
         }//End of try block
         catch (Exception exception)
         {
@@ -225,7 +234,7 @@ public class FlightBooking extends AppCompatActivity {
         LayoutInflater inflater = FlightBooking.this.getLayoutInflater();
         TravellersBuilder.setView(inflater.inflate(R.layout.number_of_travellers, null));
         alertDialog = TravellersBuilder.show();
-        //number of passengers
+        //Number of passengers
         adultsTextView = (TextView) alertDialog.findViewById(R.id.adultTextView);
         childrenTextView = (TextView) alertDialog.findViewById(R.id.childrenTextView);
         infantsTextView = (TextView) alertDialog.findViewById(R.id.infantsTextView);
@@ -241,7 +250,7 @@ public class FlightBooking extends AppCompatActivity {
     }
 
     public void showDatePicker(View view) {
-        Log.i("Log", "method invoked");
+        Log.i("Log", "showDatePicker method invoked");
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "Date Picker");
     }
@@ -252,11 +261,12 @@ public class FlightBooking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.flight_booking);
-        travellersEditText=(EditText) findViewById(R.id.travellersEditText);
+        roundTripTextView=(TextView) findViewById(R.id.roundTripTextView);
+        travellersTextView=(TextView) findViewById(R.id.travellersTextView);
         oneWayButton = (Button) findViewById(R.id.oneWayButton);
         roundTripButton = (Button) findViewById(R.id.roundTripButton);
         multiCityButton = (Button) findViewById(R.id.multicityButton);
-        roundTripEditText = (EditText) findViewById(R.id.roundTripEditText);
+        roundTripTextView = (TextView) findViewById(R.id.roundTripTextView);
         returnTextView = (TextView) findViewById(R.id.returnTextView);
         roundTripLinearLayout = (LinearLayout) findViewById(R.id.roundTripLinearLayout);
         oneAndRoundLinearLayout = (LinearLayout) findViewById(R.id.oneAndRoundLinearLayout);
@@ -267,7 +277,7 @@ public class FlightBooking extends AppCompatActivity {
         multicityButtonImageView = (ImageView) findViewById(R.id.multicityTripbuttonImageView);
 
         //connecting EditText with displayTravelClassDialog to java program here
-        displayTravelClassDialog = (EditText) findViewById(R.id.displayTravelClassDialog);
+        displayTravelClassDialog = (TextView) findViewById(R.id.displayTravelClassDialog);
 
         //oneWayButton.setCompoundDrawablesWithIntrinsicBounds( tickIcon, null, null, null );
         multicityLinearLayout = (LinearLayout) findViewById(R.id.multicityLinearLayout);
@@ -303,6 +313,9 @@ public class FlightBooking extends AppCompatActivity {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 flightDateEditText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                day=dayOfMonth;
+                                month=monthOfYear;
+                                 year_=year;
 
                             }
                         }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.DAY_OF_MONTH);
@@ -312,11 +325,7 @@ public class FlightBooking extends AppCompatActivity {
         });
         travellersDialog = (LinearLayout) findViewById(R.id.travellersDialog);
         okButton = (Button) findViewById(R.id.okButton);
-        //number of passengers
-//        adultsTextView=(TextView) alertDialog.findViewById(R.id.adultTextView);
-       /* childrenTextView =(TextView) travellersDialog.findViewById(R.id.childrenTextView);
-        infantsTextView = (TextView) travellersDialog.findViewById(R.id.infantsTextView);
-*/
+
     }// End of onCreate
 
     public void updateLabel() {
@@ -325,5 +334,32 @@ public class FlightBooking extends AppCompatActivity {
 
         flightDateEditText.setText(sdf.format(myCalendar.getTime()));
     }//End of updateLabel method
+    /*
+    * Method invoked when round trip TextView*/
+    public void setRoundTrip(View view)
+    {
+        Calendar calendar= Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH,day);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.YEAR,year_);
+        Log.i("341",day+"/"+(month+1)+"/"+year_);
+        Log.i("","setRoundTrip");
+        DatePickerDialog datePickerDialog = new DatePickerDialog(FlightBooking.this,
+                new DatePickerDialog.OnDateSetListener() {
 
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        roundTripTextView.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        returnDay=dayOfMonth;
+                        returnMonth=monthOfYear;
+                        returnYear=year;
+                    }
+                }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.DAY_OF_MONTH);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+        calendar.set(Calendar.YEAR,1);
+        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+        datePickerDialog.show();
+    }
 }//End of FlightBooking class
