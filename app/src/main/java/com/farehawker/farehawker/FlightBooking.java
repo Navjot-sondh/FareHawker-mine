@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -24,14 +25,16 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class FlightBooking extends AppCompatActivity {
-    LinearLayout oneAndRoundLinearLayout;
+    ScrollView multicityScrollView;
+    LinearLayout oneAndRoundLinearLayout,roundTripLinearLayout,multicityLinearLayout,travellersDialog;
+    LinearLayout linearLayout2,linearLayout3,linearLayout4,linearLayout5;
+    TextView multiCityTextView;
     TextView roundTripTextView;
     Button oneWayButton, roundTripButton, multiCityButton;
     TextView returnTextView;
-    LinearLayout roundTripLinearLayout;
-    LinearLayout multicityLinearLayout;
     TextView flightDateEditText,travellersTextView;
     TextView displayTravelClassDialog;
+    TextView displayMcTravelClassDialog;
     Calendar myCalendar = Calendar.getInstance();
     Button okButton;
     //Day month and year for DatePickerDilog
@@ -46,13 +49,16 @@ public class FlightBooking extends AppCompatActivity {
     TextView childrenTextView;
     TextView infantsTextView;
 
-    LinearLayout travellersDialog;
     //Images in front of buttons
     ImageView oneWaybuttonImageView, roundTripButtonImageView, multicityButtonImageView;
 
     AlertDialog.Builder TravellersBuilder;
     AlertDialog alertDialog;
 
+    //Add and remove city in multicity buttons
+    Button addCityButton;
+    Button removeCityButton;
+    static int noOfCities=1;
     //Number of travellers Alert Dialog
     public void changeTextViewColor(View view) {
 
@@ -73,6 +79,7 @@ public class FlightBooking extends AppCompatActivity {
 
                 roundTripLinearLayout.setVisibility(View.GONE);
                 multicityLinearLayout.setVisibility(View.GONE);
+                multicityScrollView.setVisibility(View.GONE);
                 oneAndRoundLinearLayout.setVisibility(View.VISIBLE);
                 //Changing the visibility of buttons
                 oneWaybuttonImageView.setVisibility(View.VISIBLE);
@@ -92,7 +99,7 @@ public class FlightBooking extends AppCompatActivity {
                 roundTripLinearLayout.setVisibility(View.VISIBLE);
                 oneAndRoundLinearLayout.setVisibility(View.VISIBLE);
                 multicityLinearLayout.setVisibility(View.GONE);
-
+                multicityScrollView.setVisibility(View.GONE);
                 //Changing the visibility of buttons
                 oneWaybuttonImageView.setVisibility(View.GONE);
                 roundTripButtonImageView.setVisibility(View.VISIBLE);
@@ -119,6 +126,7 @@ public class FlightBooking extends AppCompatActivity {
                 roundTripButton.setBackground(getResources().getDrawable(R.drawable.normal));
                 roundTripLinearLayout.setVisibility(View.GONE);
                 oneAndRoundLinearLayout.setVisibility(View.GONE);
+                multicityScrollView.setVisibility(View.VISIBLE);
                 multicityLinearLayout.setVisibility(View.VISIBLE);
 
                 //Changing the visibility of buttons
@@ -133,6 +141,7 @@ public class FlightBooking extends AppCompatActivity {
 
     public void changePassengers(View view)
     {
+        //multiCityTextView =findViewById(R.id.multiCityTextView);
         travellersTextView=findViewById(R.id.travellersTextView);
         int totalTravellers=0;
         Log.i("Log", "changePassengers");
@@ -201,7 +210,87 @@ public class FlightBooking extends AppCompatActivity {
             }
             totalTravellers=adults+children+infants;
             Log.i("TotalNumberOfTravellers",Integer.toString(totalTravellers));
+
             travellersTextView.setText(Integer.toString(totalTravellers));
+        }//End of try block
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }//End of catch block
+
+    }//End of changePassengers fumctions
+    public void changeMcPassengers(View view)
+    {
+        multiCityTextView =findViewById(R.id.multiCityTextView);
+        int totalTravellers=0;
+        Log.i("Log", "changeMcPassengers");
+        //Log.i("Here", Integer.toString(view.getId()));
+        int adults, children, infants;
+        children = Integer.parseInt(childrenTextView.getText().toString());
+        adults = Integer.parseInt(adultsTextView.getText().toString());
+        infants = Integer.parseInt(infantsTextView.getText().toString());
+        try
+        {
+            Log.i("Log", childrenTextView.getText().toString());
+            String tag = (String) view.getTag();
+            Log.i("Log", tag);
+            switch (tag)
+            {
+                //Adults
+                case "1":
+                    if (adults > 1 && (adults > infants))
+                    {
+                        adults--;
+                        adultsTextView.setText(Integer.toString(adults));
+
+                    } else if (adults == infants && adults > 1) {
+                        adults--;
+                        infants--;
+                        adultsTextView.setText(Integer.toString(adults));
+                        infantsTextView.setText(Integer.toString(infants));
+                    }
+                    break;
+                case "2":
+                    if (adults + children < 9) {
+                        adults = adults + 1;
+                        adultsTextView.setText(Integer.toString(adults));
+                    }
+                    break;
+                //children
+                case "3":
+                    if (children > 0) {
+
+                        children--;
+                        childrenTextView.setText(Integer.toString(children));
+                    }
+                    break;
+                case "4":
+                    if ((adults + children) < 9) {
+                        children = children + 1;
+                        childrenTextView.setText(Integer.toString(children));
+                    }
+                    break;
+                //- textView pressed decrease number of infants
+                case "5":
+
+                    if (infants > 0) {
+                        infants--;
+                        infantsTextView.setText(Integer.toString(infants));
+                    }
+                    break;
+                //+ sign on
+                case "6":
+                    if (infants < adults) {
+                        infants++;
+                        infantsTextView.setText(Integer.toString(infants));
+                    }
+                    break;
+
+            }
+            totalTravellers=adults+children+infants;
+            Log.i("TotalNumberOfTravellers",Integer.toString(totalTravellers));
+
+            multiCityTextView.setText(Integer.toString(totalTravellers));
         }//End of try block
         catch (Exception exception)
         {
@@ -226,6 +315,22 @@ public class FlightBooking extends AppCompatActivity {
         });
         builder.show();
     }
+    public void displayMcTravelClassDialog(View view) {
+        Log.i("Log", "EditText Tapped");
+        final String[] classes = getResources().getStringArray(R.array.travelClassArray);
+        AlertDialog.Builder builder = new AlertDialog.Builder(FlightBooking.this);
+        builder.setTitle("Travel Class");
+        builder.setItems(classes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+                // will set  your selection on EditText
+
+                displayMcTravelClassDialog.setText(classes[item]);
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
 
     public void displayTravellersDialog(View view)
     {
@@ -233,6 +338,19 @@ public class FlightBooking extends AppCompatActivity {
         TravellersBuilder = new AlertDialog.Builder(FlightBooking.this);
         LayoutInflater inflater = FlightBooking.this.getLayoutInflater();
         TravellersBuilder.setView(inflater.inflate(R.layout.number_of_travellers, null));
+        alertDialog = TravellersBuilder.show();
+        //Number of passengers
+        adultsTextView = (TextView) alertDialog.findViewById(R.id.adultTextView);
+        childrenTextView = (TextView) alertDialog.findViewById(R.id.childrenTextView);
+        infantsTextView = (TextView) alertDialog.findViewById(R.id.infantsTextView);
+        Log.i("Here", adultsTextView.getText().toString());
+    }//End of displayTravellersDialog
+    public void displayMcTravellersDialog(View view)
+    {
+        Log.i("Log", "displayTravellersDialog method");
+        TravellersBuilder = new AlertDialog.Builder(FlightBooking.this);
+        LayoutInflater inflater = FlightBooking.this.getLayoutInflater();
+        TravellersBuilder.setView(inflater.inflate(R.layout.number_of_travellers2, null));
         alertDialog = TravellersBuilder.show();
         //Number of passengers
         adultsTextView = (TextView) alertDialog.findViewById(R.id.adultTextView);
@@ -261,8 +379,10 @@ public class FlightBooking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.flight_booking);
+        multicityScrollView= findViewById(R.id.multicityScrollView);
         roundTripTextView=(TextView) findViewById(R.id.roundTripTextView);
         travellersTextView=(TextView) findViewById(R.id.travellersTextView);
+        multiCityTextView=findViewById(R.id.multiCityTextView);
         oneWayButton = (Button) findViewById(R.id.oneWayButton);
         roundTripButton = (Button) findViewById(R.id.roundTripButton);
         multiCityButton = (Button) findViewById(R.id.multicityButton);
@@ -278,7 +398,7 @@ public class FlightBooking extends AppCompatActivity {
 
         //connecting EditText with displayTravelClassDialog to java program here
         displayTravelClassDialog = (TextView) findViewById(R.id.displayTravelClassDialog);
-
+        displayMcTravelClassDialog=  findViewById(R.id.displayMcTravelClassDialog);
         //oneWayButton.setCompoundDrawablesWithIntrinsicBounds( tickIcon, null, null, null );
         multicityLinearLayout = (LinearLayout) findViewById(R.id.multicityLinearLayout);
         oneAndRoundLinearLayout.setVisibility(View.VISIBLE);
@@ -294,7 +414,14 @@ public class FlightBooking extends AppCompatActivity {
         //Changing colour of flight one way button  to white
         oneWayButton.setTextColor(Color.parseColor("#FFFFFF"));
 
-
+        //connecting add and remove city buttons
+        removeCityButton= findViewById(R.id.removeCityButton);
+        addCityButton= findViewById(R.id.addCityButton);
+        //MultiCity views
+        linearLayout2=findViewById(R.id.linearLayout2);
+        linearLayout3=findViewById(R.id.linearLayout3);
+        linearLayout4=findViewById(R.id.linearLayout4);
+        linearLayout5=findViewById(R.id.linearLayout5);
         //Edit Text For Date Picker Dialog
         flightDateEditText = (EditText) findViewById(R.id.flightDateEditText);
         flightDateEditText.setOnClickListener(new OnClickListener() {
@@ -358,8 +485,60 @@ public class FlightBooking extends AppCompatActivity {
                     }
                 }, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.DAY_OF_MONTH);
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        calendar.set(Calendar.YEAR,1);
+        calendar.add(Calendar.YEAR,1);
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
         datePickerDialog.show();
-    }
+    }//End of setRoundTrip method
+    public void changeNoOfCities(View view)
+    {
+
+
+        Log.i("377","changeNoOfCities method ");
+
+        String tag=view.getTag().toString();
+        if(tag.equals("1"))
+        {
+            Log.i("tag","1");
+            switch(noOfCities)
+            {
+                case 1: linearLayout2.setVisibility(View.VISIBLE);
+                        noOfCities++;
+                    break;
+                case 2:
+                    linearLayout3.setVisibility(View.VISIBLE);
+                    noOfCities++;
+                    break;
+                case 3:linearLayout4.setVisibility(View.VISIBLE);
+                    noOfCities++;
+                    break;
+                case 4:linearLayout5.setVisibility(View.VISIBLE);
+                    noOfCities++;
+                    break;
+
+                default:
+
+            }//End of switch
+        }//End of if
+        else
+        {
+            Log.i("tag","2");
+            switch(noOfCities)
+            {
+                case 2: linearLayout2.setVisibility(View.GONE);
+                noOfCities--;
+                    break;
+                case 3:
+                    linearLayout3.setVisibility(View.GONE);
+                    noOfCities--;
+                    break;
+                case 4:linearLayout4.setVisibility(View.GONE);
+                    noOfCities--;
+                    break;
+                case 5:linearLayout5.setVisibility(View.GONE);
+                    noOfCities--;
+                    break;
+                default:
+            }//End of switch
+        }//End of else
+    }//End of changeNoOfCities method
 }//End of FlightBooking class
