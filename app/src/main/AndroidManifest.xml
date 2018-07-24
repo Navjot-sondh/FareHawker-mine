@@ -17,11 +17,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".FlightBooking" >
-
         </activity>
+
         <activity android:name=".HotelSearch">
-
         </activity>
+
+        <activity android:name=".OneWay">
+        </activity>
+
     </application>
 
 </manifest>
