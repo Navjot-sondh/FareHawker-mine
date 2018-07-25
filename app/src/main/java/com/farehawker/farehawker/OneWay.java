@@ -61,7 +61,8 @@ public class OneWay extends AppCompatActivity
     Button addCityButton;
     Button removeCityButton;
     static int noOfCities=1;
-    public void changeTextViewColor(View view) {
+    public void changeTextViewColor(View view)
+    {
 
         String tag = (String) view.getTag();
         Log.i("Log", "" + view.getTag());
@@ -142,7 +143,7 @@ public class OneWay extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.flight_booking);
+        setContentView(R.layout.flight_booking);
         Log.i("","Inside one way onCreate method");
         multicityScrollView= findViewById(R.id.multicityScrollView);
         roundTripTextView=(TextView) findViewById(R.id.roundTripTextView);
@@ -166,7 +167,8 @@ public class OneWay extends AppCompatActivity
         displayMcTravelClassDialog=  findViewById(R.id.displayMcTravelClassDialog);
         //oneWayButton.setCompoundDrawablesWithIntrinsicBounds( tickIcon, null, null, null );
         multicityLinearLayout = (LinearLayout) findViewById(R.id.multicityLinearLayout);
-        oneAndRoundLinearLayout.setVisibility(View.VISIBLE);
+
+        //oneAndRoundLinearLayout.setVisibility(View.VISIBLE);
 
         oneWaybuttonImageView.setVisibility(View.VISIBLE);
         roundTripButtonImageView.setVisibility(View.GONE);

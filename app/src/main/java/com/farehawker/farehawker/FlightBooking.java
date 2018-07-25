@@ -25,30 +25,36 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class FlightBooking extends AppCompatActivity implements  OnClickListener
-{
+public class FlightBooking extends AppCompatActivity implements OnClickListener {
 
-    Button oneWayButton;
+    Button oneWayButton, roundTripButton, multiCityButton;
+
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.flight_booking);
         oneWayButton = findViewById(R.id.oneWayButton);
+        roundTripButton = findViewById(R.id.roundTripButton);
+        multiCityButton = findViewById(R.id.multicityButton);
         oneWayButton.setOnClickListener(this);
+        roundTripButton.setOnClickListener(this);
+        multiCityButton.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view)
-    {
-        switch(view.getId())
-        {
-            case R.id.oneWayButton: Intent intent = new Intent(getApplicationContext(),OneWay.class);
-                                    startActivity(intent);
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.oneWayButton:
+                Intent intent = new Intent(getApplicationContext(), OneWay.class);
+                startActivity(intent);
                 break;
             case R.id.roundTripButton:
+                intent = new Intent(getApplicationContext(), RoundTripBooking.class);
+                startActivity(intent);
                 break;
             case R.id.multicityButton:
+                intent = new Intent(getApplicationContext(), MultiCityBooking.class);
+                startActivity(intent);
                 break;
         }
     }

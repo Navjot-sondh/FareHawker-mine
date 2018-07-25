@@ -44,10 +44,24 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.GroceryViewHol
             public void onClick(View v) {
                 String productName = horizontalGrocderyList.get(position).getProductName().toString();
                 Toast.makeText(context, productName + " is selected", Toast.LENGTH_SHORT).show();
+                switch(productName)
+                {
+                    case "FLIGHT":Intent intent = new Intent(context,OneWay.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                        break;
+                    case "HOTEL": intent = new Intent(context,HotelSearch.class);
+                    context.startActivity(intent);
+                    case "HELICOPTER":
+                        break;
+                    case "PRIVET JETS":
+                        break;
+                    case "GROUP BOOKING":
+                        break;
+                    default:
+                        break;
+                }//End of switch
 
-                Intent intent = new Intent(context,FlightBooking.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
             }
         });
     }
