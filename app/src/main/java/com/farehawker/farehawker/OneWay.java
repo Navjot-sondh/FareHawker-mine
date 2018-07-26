@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class OneWay extends AppCompatActivity
+public class OneWay extends AppCompatActivity implements OnClickListener
 {
     ScrollView multicityScrollView;
     LinearLayout oneAndRoundLinearLayout,roundTripLinearLayout,multicityLinearLayout,travellersDialog;
@@ -140,6 +140,12 @@ public class OneWay extends AppCompatActivity
         }
 
     }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,5 +195,8 @@ public class OneWay extends AppCompatActivity
         linearLayout3=findViewById(R.id.linearLayout3);
         linearLayout4=findViewById(R.id.linearLayout4);
         linearLayout5=findViewById(R.id.linearLayout5);
+
+        //Sending a request by Volley library
+
     }
 }//End of OneWay class

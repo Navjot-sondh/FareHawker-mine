@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_orange_dark"
                 android:fontFamily="sans-serif"
-
+                android:onClick="changeTextViewColor"
                 android:tag="1"
                 android:text="One Way"
                 android:textSize="10sp"
