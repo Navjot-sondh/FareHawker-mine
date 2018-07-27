@@ -4,11 +4,17 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +27,28 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class OneWay extends AppCompatActivity implements OnClickListener
 {
+
+
+    TextView origin;
+
     ScrollView multicityScrollView;
     LinearLayout oneAndRoundLinearLayout,roundTripLinearLayout,multicityLinearLayout,travellersDialog;
     LinearLayout linearLayout2,linearLayout3,linearLayout4,linearLayout5;
@@ -61,6 +83,8 @@ public class OneWay extends AppCompatActivity implements OnClickListener
     Button addCityButton;
     Button removeCityButton;
     static int noOfCities=1;
+
+
     public void changeTextViewColor(View view)
     {
 
@@ -142,7 +166,15 @@ public class OneWay extends AppCompatActivity implements OnClickListener
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View view)
+    {
+        switch(view.getId())
+        {
+            case R.id.origin: Intent intent = new Intent(getApplicationContext(),OriginAirport.class);
+                            startActivity(intent);
+                break;
+
+        }
 
     }
 
@@ -196,7 +228,8 @@ public class OneWay extends AppCompatActivity implements OnClickListener
         linearLayout4=findViewById(R.id.linearLayout4);
         linearLayout5=findViewById(R.id.linearLayout5);
 
-        //Sending a request by Volley library
+        origin =findViewById(R.id.origin);
 
-    }
+    }//End of onCreate method
+
 }//End of OneWay class

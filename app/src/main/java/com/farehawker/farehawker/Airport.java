@@ -1,6 +1,6 @@
 package com.farehawker.farehawker;
 
-public class AirportList
+public class Airport
 {
     private String cityName;
     private String countryName;
@@ -22,14 +22,24 @@ public class AirportList
         return airportCode;
     }
 
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 
-    public AirportList(String cityName, String countryName, String countryCode, String airportCode)
+    public void setAirportCode(String airportCode) {
+        this.airportCode = airportCode;
+    }
+
+    public Airport()
     {
-        this.airportCode=airportCode;
-        this.cityName=cityName;
-        this.countryCode=countryCode;
-        this.countryName=countryName;
+
     }
 }
