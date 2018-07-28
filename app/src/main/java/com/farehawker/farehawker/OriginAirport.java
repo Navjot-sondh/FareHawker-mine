@@ -1,4 +1,5 @@
 package com.farehawker.farehawker;
+import javax.net.ssl.SSLSocketFactory;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.webkit.WebStorage;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,10 +25,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OriginAirport extends AppCompatActivity  implements TextWatcher{
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+
+public class OriginAirport extends AppCompatActivity  {
 
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
     public static final int CONNECTION_TIMEOUT = 10000;
@@ -35,44 +41,69 @@ public class OriginAirport extends AppCompatActivity  implements TextWatcher{
     private AirportCodeAdapter mAdapter;
     EditText search;
     AirportCodeAdapter adapter;
-    List<Airport> data=new ArrayList<Airport>();
-    TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-        {
+    ArrayList<Airport> data=new ArrayList<Airport>();
 
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
-        {
-            adapter.getFilter().filter(charSequence.toString());
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable)
-        {
-            filter(editable.toString());
-        }
-    };
-    public void filter(String text) {
-        //new array list that will hold the filtered data
-        ArrayList<Airport> filterdNames = new ArrayList<>();
-
-        //looping through existing elements
-    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.airport_list);
         //Make call to AsyncTask
         search=findViewById(R.id.search);
         new AsyncFetch().execute();
-        search.addTextChangedListener(watcher);
+        search.setTextIsSelectable(true);
+        search.setFocusable(true);
+        search.setFocusableInTouchMode(true);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }
+            public void listUpdate(ArrayList<Airport> data)
+            {
+                mRVAirports = findViewById(R.id.main_list);
+                mAdapter = new AirportCodeAdapter(OriginAirport.this, data);
+                mRVAirports.setAdapter(mAdapter);
+                mRVAirports.setLayoutManager(new LinearLayoutManager(OriginAirport.this));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
+            {
+
+            }//End of onTextChanged method
+
+            @Override
+            public void afterTextChanged(Editable editable)
+            {
+                Log.i("","onTextChanged method invoked");
+                ArrayList<Airport> type_name_filter = new ArrayList<Airport>();
+
+                String text =editable.toString();
+
+                for (int i_ = 0; i_ < data.size(); i_++)
+                {
+                    Log.i("",data.get(i_).toString());
+                    if ((data.get(i_).toString().toLowerCase()).contains(text
+                            .toLowerCase())) {
+                        Log.i("Filtered",String.valueOf(i_));
+                        type_name_filter.add(data.get(i_));
+
+                    }
+                }
+
+
+
+                listUpdate(type_name_filter);
+            }//End of afterTextChanged method
+        });
+        //search.addTextChangedListener(watcher);
     }
 
-    private class AsyncFetch extends AsyncTask<String, String, String> {
+    private class AsyncFetch extends AsyncTask<String, String, String>
+    {
         ProgressDialog pdLoading = new ProgressDialog(OriginAirport.this);
         HttpURLConnection conn;
         URL url = null;
@@ -101,9 +132,8 @@ public class OriginAirport extends AppCompatActivity  implements TextWatcher{
                 e.printStackTrace();
                 return e.toString();
             }
-            try {
-
-                // Setup HttpURLConnection class to send and receive data from php and mysql
+            try
+            {
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(READ_TIMEOUT);
                 conn.setConnectTimeout(CONNECTION_TIMEOUT);
@@ -112,7 +142,8 @@ public class OriginAirport extends AppCompatActivity  implements TextWatcher{
                 // setDoOutput to true as we recieve data from json file
                 conn.setDoOutput(true);
 
-            } catch (IOException e1) {
+            }
+            catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
                 return e1.toString();
@@ -165,10 +196,11 @@ public class OriginAirport extends AppCompatActivity  implements TextWatcher{
             try {
 
                 JSONArray jArray = new JSONArray(result);
-                Log.i("","");
+                Log.i("Here",jArray.toString());
                 // Extract data from json and store into ArrayList as class objects
                 for(int i=0;i<jArray.length();i++){
                     JSONObject json_data = jArray.getJSONObject(i);
+
                     Airport airportData = new Airport();
                     airportData.setCityName(json_data.getString("city_name"));
                     airportData.setCountryName(json_data.getString("country_name"));
