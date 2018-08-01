@@ -11,10 +11,10 @@
     android:hint="Enter a City or Airport Code"
     android:layout_height="50dp"
     />
-<android.support.v7.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
 
-    android:id="@+id/main_list"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-</android.support.v7.widget.RecyclerView>
-</LinearLayout>
+        android:id="@+id/main_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+    </LinearLayout>

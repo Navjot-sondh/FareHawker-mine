@@ -4,7 +4,8 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.farehawker.farehawker"
-        minSdkVersion 16
+        //api level 21 is Lollipop
+        minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"

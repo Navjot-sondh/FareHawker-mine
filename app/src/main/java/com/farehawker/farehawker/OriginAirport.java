@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebStorage;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -32,8 +33,9 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
-public class OriginAirport extends AppCompatActivity  {
-
+public class OriginAirport extends AppCompatActivity
+{
+    private String TAG = "OriginAirport";
     // CONNECTION_TIMEOUT and READ_TIMEOUT are in milliseconds
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
@@ -42,8 +44,6 @@ public class OriginAirport extends AppCompatActivity  {
     EditText search;
     AirportCodeAdapter adapter;
     ArrayList<Airport> data=new ArrayList<Airport>();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -64,6 +64,21 @@ public class OriginAirport extends AppCompatActivity  {
             public void listUpdate(ArrayList<Airport> data)
             {
                 mRVAirports = findViewById(R.id.main_list);
+                //Code to add click listner
+                mRVAirports.addOnItemTouchListener(
+                        new RecyclerItemClickListener(getApplicationContext(), mRVAirports ,new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override public void onItemClick(View view, int position)
+                            {
+                                Toast.makeText(OriginAirport.this,"Item Clicked",Toast.LENGTH_LONG).show();
+                               Log.i(TAG,"Inside onItemClick method");
+                            }
+
+                            @Override public void onLongItemClick(View view, int position) {
+                                // do whatever
+                            }
+                        })
+                );
+
                 mAdapter = new AirportCodeAdapter(OriginAirport.this, data);
                 mRVAirports.setAdapter(mAdapter);
                 mRVAirports.setLayoutManager(new LinearLayoutManager(OriginAirport.this));
@@ -93,9 +108,6 @@ public class OriginAirport extends AppCompatActivity  {
 
                     }
                 }
-
-
-
                 listUpdate(type_name_filter);
             }//End of afterTextChanged method
         });
@@ -121,8 +133,8 @@ public class OriginAirport extends AppCompatActivity  {
 
         @Override
         protected String doInBackground(String... params) {
-            try {
-
+            try
+            {
                 // Enter URL address where your json file resides
                 // Even you can make call to php file which returns json data
                 url = new URL("https://www.farehawker.com/api/airpot-code.php");
@@ -190,7 +202,7 @@ public class OriginAirport extends AppCompatActivity  {
             //this method will be running on UI thread
 
             pdLoading.dismiss();
-           // data=new ArrayList<>();
+            // data=new ArrayList<>();
 
             pdLoading.dismiss();
             try {
@@ -214,6 +226,19 @@ public class OriginAirport extends AppCompatActivity  {
 
                 // Setup and Handover data to recyclerview
                 mRVAirports = findViewById(R.id.main_list);
+                mRVAirports.addOnItemTouchListener(
+                        new RecyclerItemClickListener(getApplicationContext(), mRVAirports ,new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override public void onItemClick(View view, int position)
+                            {
+                                Toast.makeText(OriginAirport.this,"Item Clicked",Toast.LENGTH_LONG).show();
+                                Log.i(TAG,"Inside onItemClick method");
+                            }
+
+                            @Override public void onLongItemClick(View view, int position) {
+                                // do whatever
+                            }
+                        })
+                );
                 mAdapter = new AirportCodeAdapter(OriginAirport.this, data);
                 mRVAirports.setAdapter(mAdapter);
                 mRVAirports.setLayoutManager(new LinearLayoutManager(OriginAirport.this));
